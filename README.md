@@ -1,4 +1,4 @@
-# Next.js Blog App ✍️
+# Next.js Blog App 
 
 ![License](https://img.shields.io/github/license/shuei0609/next-blog-app)
 ![Next.js](https://img.shields.io/badge/Next.js-14.0-black)
@@ -8,7 +8,7 @@
 モダンなWeb技術スタック（Next.js App Router, TypeScript, Tailwind CSS）を用いて構築された、SEO最適化済みのブログアプリケーションです。
 パフォーマンス（Core Web Vitals）と開発者体験（DX）を重視して設計しました。
 
-## ✨ 主な機能 (Features)
+##  主な機能 (Features)
 
 ### ユーザー向け機能
 * **記事閲覧**: 高速なページ遷移による快適な読書体験
@@ -21,7 +21,7 @@
 * **SEO対策**: `Metadata API` を用いた動的なOGP生成、セマンティックなHTML構造。
 * **パフォーマンス最適化**: `next/image` による画像最適化、フォントの最適化。
 
-## 🛠 使用技術 (Tech Stack)
+##  使用技術 (Tech Stack)
 
 このプロジェクトでは、以下の技術を選定・採用しました。
 
@@ -33,11 +33,10 @@
 | **CMS / Data** | **[microCMS / Contentlayer]** | `[例: APIベースで柔軟なコンテンツ管理を行うため / 型安全にMarkdownを扱うため]` |
 | **Deployment** | **Vercel** | CI/CDの自動化と、Next.jsの機能を最大限活かすエッジネットワーク利用のため。 |
 
-## 🏗 ディレクトリ構成 (Architecture)
+##  ディレクトリ構成 (Architecture)
 
 保守性を意識し、関心ごとの分離を行っています。
-
-```bash
+```
 .
 ├── app/                # App Router (Pages & Layouts)
 │   ├── components/     # UI Components (Atomic Designを意識)
@@ -46,3 +45,26 @@
 ├── public/             # Static assets
 ├── types/              # TypeScript definitions
 └── ...
+```
+## 開発環境のセットアップ (Getting Started)
+ローカル環境でこのプロジェクトを実行する手順です。
+
+```
+# 1. リポジトリのクローン
+git clone [https://github.com/shuei0609/next-blog-app.git](https://github.com/shuei0609/next-blog-app.git)
+
+# 2. ディレクトリ移動
+cd next-blog-app
+
+# 3. 依存関係のインストール
+npm install
+# or
+yarn install
+
+# 4. 環境変数の設定 (必要に応じて)
+# .env.local ファイルを作成し、必要なAPIキー等を記述してください。
+
+# 5. 開発サーバーの起動
+npm run dev
+ブラウザで http://localhost:3000 を開くと確認できます。
+```
