@@ -1,4 +1,11 @@
-import { Category } from "@/generated/prisma/client";
+// import { Category } from "@/generated/prisma/client";
+
+export type Category = {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export type Post = {
   id: string;

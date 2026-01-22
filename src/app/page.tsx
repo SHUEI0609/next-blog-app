@@ -10,30 +10,39 @@ type Props = {
   };
 };
 
-// 開発環境ならlocalhost、本番なら実際のURLを使う
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+import { prisma } from "@/lib/prisma";
+
+export const dynamic = 'force-dynamic'; // 常に最新のデータを取得
 
 export default async function Home({ searchParams }: Props) {
-  // エラー処理を含めるのがベスト
   try {
-    const res = await fetch(`${apiUrl}/api/posts`, { cache: 'no-store' });
-    if (!res.ok) throw new Error('Failed to fetch data');
-    const posts: Post[] = await res.json();
-
     // クエリパラメータからソート順を取得 (デフォルトはdesc:新しい順)
     const sortOrder = searchParams.sort === "asc" ? "asc" : "desc";
 
-    // 指定された順序で並び替え
-    const sortedPosts = [...posts].sort((a, b) => {
-      const timeA = new Date(a.createdAt).getTime();
-      const timeB = new Date(b.createdAt).getTime();
-
-      if (sortOrder === "asc") {
-        return timeA - timeB; // 古い順 (昇順)
-      } else {
-        return timeB - timeA; // 新しい順 (降順)
-      }
+    // データベースから直接データを取得
+    const postsData = await prisma.post.findMany({
+      orderBy: {
+        createdAt: sortOrder,
+      },
+      include: {
+        categories: {
+          include: {
+            category: true,
+          },
+        },
+      },
     });
+
+    const posts = postsData.map((post) => ({
+      ...post,
+      createdAt: post.createdAt.toISOString(),
+      updatedAt: post.updatedAt.toISOString(),
+      categories: post.categories.map((pc) => ({
+        ...pc.category,
+        createdAt: pc.category.createdAt.toISOString(),
+        updatedAt: pc.category.updatedAt.toISOString(),
+      })),
+    }));
 
     // 投稿記事の一覧を出力
     return (
@@ -44,7 +53,7 @@ export default async function Home({ searchParams }: Props) {
             <SortControl />
           </div>
           <div className="post-list">
-            {sortedPosts.map((post) => (
+            {posts.map((post) => (
               <PostSummary key={post.id} post={post} />
             ))}
           </div>
@@ -56,7 +65,7 @@ export default async function Home({ searchParams }: Props) {
       </div>
     );
   } catch (error) {
-    console.error(error);
-    return <div>エラーが発生しました</div>;
+    console.error("Failed to fetch posts:", error);
+    return <div>データの取得に失敗しました。</div>;
   }
 }
